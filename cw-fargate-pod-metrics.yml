@@ -1,0 +1,46 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    run: cw-fargate-pod-metrics
+  name: cw-fargate-pod-metrics
+  namespace: amazon-cloudwatch
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: cw-fargate-pod-metrics
+  template:
+    metadata:
+      labels:
+        run: cw-fargate-pod-metrics
+    spec:
+      containers:
+      - name: cw-fargate-pod-metrics
+        image: saiteja313/cloudwatch-fargate-metrics:latest
+        imagePullPolicy: Always
+        command: ['sh', '-c', 'echo Inital wait time 120 seconds; sleep 120; while true; do sh /opt/cloudwatch-fargate-metrics/cw-put-pod-metrics.sh ${POD_NAME} ${AWS_REGION} ${POD_NAMESPACE}; sleep 20; done;']
+        resources:
+          limits:
+            memory: "4G"
+            cpu: "2"
+        env:
+        - name: AWS_REGION
+          value: "us-east-2"
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+      - name: some-container
+        image: saiteja313/aws-cli:latest
+        command: ['sh', '-c', 'while true; do echo waiting for something; sleep 20; done;']
+        resources:
+          limits:
+            memory: "4G"
+            cpu: "2"
+      serviceAccountName: cloudwatch-agent
+      restartPolicy: Always
