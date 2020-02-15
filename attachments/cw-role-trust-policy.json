@@ -8,7 +8,7 @@
         },
         "Action": "sts:AssumeRoleWithWebIdentity",
         "Condition": {
-            "StringEquals": {
+            "StringLike": {
             "<OIDC_PROVIDER_URL>:sub": "system:serviceaccount:*:*",
             "<OIDC_PROVIDER_URL>:aud": "sts.amazonaws.com"
             }

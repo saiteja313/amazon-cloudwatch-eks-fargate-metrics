@@ -22,8 +22,8 @@ spec:
         command: ['sh', '-c', 'echo Inital wait time 120 seconds; sleep 120; while true; do sh /opt/cloudwatch-fargate-metrics/cw-put-pod-metrics.sh ${POD_NAME} ${AWS_REGION} ${POD_NAMESPACE}; sleep 20; done;']
         resources:
           limits:
-            memory: "4G"
-            cpu: "2"
+            memory: "2G"
+            cpu: "1"
         env:
         - name: AWS_REGION
           value: <AWS_REGION> # Eg: "us-east-2"
@@ -40,7 +40,7 @@ spec:
         command: ['sh', '-c', 'while true; do echo waiting for something; sleep 20; done;']
         resources:
           limits:
-            memory: "4G"
-            cpu: "2"
+            memory: "2G"
+            cpu: "1"
       serviceAccountName: cloudwatch-agent
       restartPolicy: Always

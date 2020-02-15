@@ -5,7 +5,7 @@ metadata:
   name: cloudwatch-agent
   namespace: <YOUR_POD_NAMESPACE_NAME> #Eg: amazon-cloudwatch
   annotations:
-    eks.amazonaws.com/role-arn: <IAM_ROLE_ARN> #Eg: arn:aws:iam::074598670345:role/eks-worker-role-generic
+    eks.amazonaws.com/role-arn: <IAM_ROLE_ARN> #Eg: arn:aws:iam::12345345:role/your-iam-role-name
 ---
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
@@ -22,8 +22,8 @@ rules:
   #   resources: ["jobs"]
   #   verbs: ["list", "watch"]
   - apiGroups: [""]
-    resources: ["nodes/proxy", "pods", "pods/status", "pods/memory"]
-    verbs: ["get"]
+    resources: ["pods", "pods/status", "pods/memory"]
+    verbs: ["get"] 
   # - apiGroups: [""]
   #   resources: ["nodes/stats", "configmaps", "events"]
   #   verbs: ["create"]
@@ -43,7 +43,7 @@ metadata:
 subjects:
   - kind: ServiceAccount
     name: cloudwatch-agent
-    namespace: amazon-cloudwatch
+    namespace: <YOUR_POD_NAMESPACE_NAME>
 roleRef:
   kind: ClusterRole
   name: cloudwatch-agent-role
